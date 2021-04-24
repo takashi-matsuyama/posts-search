@@ -5,7 +5,7 @@ Tags: posts search, search, taxonomy, term
 Requires at least: 4.8
 Tested up to: 5.6
 Requires PHP: 5.4.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,7 @@ For example, in `header.php` add `<?php if( shortcode_exists( 'ccc_posts_search_
 
 For example, in `search.php` add `<?php if( shortcode_exists( 'ccc_posts_search_results' ) ) { echo do_shortcode('[ccc_posts_search_results posts_per_page=" 15" search_keyword="false"]'); } ? >`.
 
+Detailed usage is under preparation.
 
 == Installation ==
 
@@ -37,6 +38,9 @@ For example, in `search.php` add `<?php if( shortcode_exists( 'ccc_posts_search_
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.0 =
+Add shortcode attribute (`title_select="" highlight="" locale=""`) markup of thumbnails and modify CSS.
 
 = 1.0.0 =
 Initial release.

@@ -69,7 +69,9 @@
 }
 #ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] #ccc-search_ajax-submit {
   margin: 2em auto 1em auto;
-  font-size: 14px;
+  font-size: 1em;
+  color: initial;
+  border: 1px solid;
   padding: 0.35em 0.75em;
   box-sizing: border-box;
   border-radius: 5px;
@@ -89,7 +91,7 @@
 #ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .icon-ccc_search_ajax-search::before {
   display: inline-block;
   vertical-align: middle;
-  font-size: 18px;
+  font-size: 1.3em;
 }
 #ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .count-found_posts .number {
   font-size: 1.3em;

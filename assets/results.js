@@ -1,8 +1,8 @@
 /*
-* Author: Takashi Matsuyama of Caronima Inc.
-* Author URI: https://www.caronima.com/
+* Author: Takashi Matsuyama
+* Author URI: https://profiles.wordpress.org/takashimatsuyama/
 * Description: AjaxでWordPressの検索結果を表示しページャー無しでクリックでさらに読み込み（found_posts.jsが必要）
-* Version: 1.0.0
+* Version: 1.1.0 or later
 */
 
 /*
@@ -46,10 +46,7 @@ var CCC = CCC || {};
     data_set['looplength'] = looplength_val;
     /* 一回のリクエストで取得する投稿数を送信データに追加 */
     data_set['ccc-posts_per_page'] = posts_per_page_value;
-    /* 検索キーワードをハイライトにするオプションの有無を送信データに追加 */
-    data_set['search_highlight_ajax'] = true; // 検索キーワードをハイライトにするアクションフックで使用（不要な場合はfalse）
 
-    //console.log( data_set );
 
     /* 読み込み中のローディングを表示 */
     loader.show();

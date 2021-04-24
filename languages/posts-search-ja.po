@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the DBP Cloud WP Plugin package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Posts Search Plugin Pot v1.0.0\n"
+"Project-Id-Version: Posts Search Plugin Pot v1.1.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2021-01-20 23:26+0900\n"
+"POT-Creation-Date: 2021-01-28 21:39+0900\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: https://profiles.wordpress.org/takashimatsuyama/\n"
+"Language-Team: Takashi Matsuyama\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,51 +31,46 @@ msgstr "続きを読む"
 msgid "There are no articles that hit the search criteria."
 msgstr "検索条件にヒットした記事はありません。"
 
-#: assets/shortcode-results.php:38
+#: assets/shortcode-results.php:42
 msgid "No search keyword has been entered."
 msgstr "検索キーワードが未入力です。"
 
-#: assets/shortcode-results.php:45
+#: assets/shortcode-results.php:49
 msgid "Read further"
 msgstr "さらに読み込む"
 
-#: assets/shortcode-results.php:46
+#: assets/shortcode-results.php:50
 msgid "Loading"
 msgstr ""
 
-#: assets/shortcode-results.php:80
+#: assets/shortcode-results.php:86
 msgid "Search keyword"
 msgstr "検索キーワード"
 
-#: assets/shortcode-results.php:81
+#: assets/shortcode-results.php:87
 msgid "Search area"
 msgstr "検索範囲"
 
-#: assets/shortcode-results.php:93
+#: assets/shortcode-results.php:99
 msgid "item display"
 msgid_plural "items display"
 msgstr[0] "件表示"
 
-#: assets/shortcode-searchform.php:21
+#: assets/shortcode-searchform.php:25
 msgid "Enter a keyword"
 msgstr "キーワードを入力"
 
-#: assets/shortcode-searchform.php:29
-msgid "Select a search area"
-msgstr "検索範囲を選択"
+#: assets/shortcode-searchform.php:35
+msgid "Search Scope"
+msgstr "検索範囲"
 
-#: assets/shortcode-searchform.php:31 assets/wp_query.php:35
+#: assets/shortcode-searchform.php:64 assets/wp_query.php:35
 msgid "All"
 msgstr "すべて"
 
-#: assets/shortcode-searchform.php:51
+#: assets/shortcode-searchform.php:84
 msgid "Search"
 msgstr "検索"
-
-#: assets/shortcode-searchform.php:95
-#, php-format
-msgid "Filter by %s"
-msgstr "%sで絞り込む"
 
 #: function.php:57
 #, php-format
@@ -93,3 +88,10 @@ msgstr "このプラグインは、PHP %s 以上が必要になります。"
 #: posts-search.php:62
 msgid "Oops, PHP Class Name Conflict."
 msgstr "PHPのクラス名が競合しています。"
+
+#~ msgid "Select a search area"
+#~ msgstr "検索範囲を選択"
+
+#, php-format
+#~ msgid "Filter by %s"
+#~ msgstr "%sで絞り込む"

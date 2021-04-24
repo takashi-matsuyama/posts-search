@@ -144,9 +144,17 @@
 #ccc-search_ajax-results-content[data-ccc_posts_search-results-style="1"] .images-search_results .img-post-thumbnail {
   width: 160px;
   padding-bottom: 56.25%; /* 16:9 */
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  position: relative;
+}
+#ccc-search_ajax-results-content[data-ccc_posts_search-results-style="1"] .images-search_results .img-post-thumbnail img {
+  object-fit: cover;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 #ccc-search_ajax-results-content[data-ccc_posts_search-results-style="1"] .text-search_results {
   width: calc( 100% - 160px - 1em );

@@ -30,11 +30,11 @@ class CCC_Search_Ajax {
   } //endfunction
 
   public function found_posts_styles() {
-    wp_enqueue_style( 'ccc_search_ajax-found_posts-css', CCCSEARCHAJAX_PLUGIN_URL.'/assets/found_posts.css', array(), CCCSEARCHAJAX_PLUGIN_VERSION, 'all');
+    wp_enqueue_style( 'ccc_search_ajax-found_posts', CCCSEARCHAJAX_PLUGIN_URL.'/assets/found_posts.css', array(), CCCSEARCHAJAX_PLUGIN_VERSION, 'all');
   }
 
   public function found_posts_scripts() {
-    $handle = 'ccc_search_ajax-found_posts-js';
+    $handle = 'ccc_search_ajax-found_posts';
     $file = 'found_posts.js';
     wp_register_script( $handle, CCCSEARCHAJAX_PLUGIN_URL.'/assets/'.$file, array( 'jquery' ), CCCSEARCHAJAX_PLUGIN_VERSION, true );
     wp_enqueue_script( $handle );
@@ -68,13 +68,13 @@ class CCC_Search_Ajax {
 
   public function results_styles() {
     if( is_search() ) {
-      wp_enqueue_style( 'ccc_search_ajax-results-css', CCCSEARCHAJAX_PLUGIN_URL.'/assets/results.css', array(), CCCSEARCHAJAX_PLUGIN_VERSION, 'all');
+      wp_enqueue_style( 'ccc_search_ajax-results', CCCSEARCHAJAX_PLUGIN_URL.'/assets/results.css', array(), CCCSEARCHAJAX_PLUGIN_VERSION, 'all');
     }
   }
 
   public function results_scripts() {
     if( is_search() ) {
-      $handle = 'ccc_search_ajax-results-js';
+      $handle = 'ccc_search_ajax-results';
       $file = 'results.js';
       wp_register_script( $handle, CCCSEARCHAJAX_PLUGIN_URL.'/assets/'.$file, array( 'jquery' ), CCCSEARCHAJAX_PLUGIN_VERSION, true );
       wp_enqueue_script( $handle );

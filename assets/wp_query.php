@@ -1,7 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) {
   exit; // Exit if accessed directly.
-}
+} //endif
 
 if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
   class CCC_Search_Ajax_WP_Query {
@@ -22,8 +22,8 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
       }
 
       /*** post_type用 ***/
-      if( $query_posttype === 'all' ) {
-        /*
+      if( $query_posttype === 'all' or ! $query_posttype ) {
+      /*
       * 使用禁止：「any」だと「get_object_taxonomies()」を利用できないので使用禁止
       * $post_types = 'any'; // リビジョンと 'exclude_from_search' が true にセットされたものを除き、すべてのタイプを含める
       */
@@ -37,11 +37,10 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
         $post_types = $query_posttype;
         $post_type_obj = get_post_type_object( $post_types );
         $posttype_name = $post_type_obj->labels->name;
-      }
+      } //endif
 
 
       /*** tax_query用 ***/
-      //$taxqueries = [];
       $taxqueries = array('relation' => 'AND');
       /*
       * NG：$taxonomies = get_object_taxonomies( $post_types, 'objects' );
@@ -53,7 +52,7 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
       );
       $post_types_any = get_post_types( $args, 'names' );
       $taxonomies = get_object_taxonomies( $post_types_any, 'objects' ); //選択項目と検索結果の矛盾を避けるため配列にはすべてのタクソノミーを入れて検索する必要がある。
-      foreach ( $taxonomies as $taxonomy ) {
+      foreach( $taxonomies as $taxonomy ) {
         if( is_array( $_GET['search_'. $taxonomy->name] ) ) {
           ${'taxvalue_'. $taxonomy->name} = array_map( 'absint', $_GET['search_'. $taxonomy->name] ) ;
         } else if( is_array( $_POST['search_'. $taxonomy->name] ) ) {
@@ -71,7 +70,7 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
           );
         }
         array_push( $taxqueries, ${'taxquery_'. $taxonomy->name} );
-      }
+      } //endforeach
 
 
       /*** meta_query用 ***/
@@ -99,6 +98,15 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
         'meta_query' => $metaqueries,
         'orderby' => array( 'type' => 'ASC', 'menu_order' => 'ASC' ),
       );
+
+
+      /***** For WordPress Plugin "bogo" : START *****/
+      if( $_POST['bogo'] ) {
+        $locale = sanitize_text_field( $_POST['bogo'] );
+        $args['lang'] = $locale;
+      }
+      /***** For WordPress Plugin "bogo" : END *****/
+
 
       $the_query = new WP_Query($args);
 

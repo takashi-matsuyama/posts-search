@@ -15,6 +15,9 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
       $atts = shortcode_atts(array(
         "placeholder" => '',
         "style" => '',
+        "title_select" => '',
+        "highlight" => '',
+        "locale" => '',
       ),$atts);
       if( $atts['placeholder'] ) {
         $placeholder = $atts['placeholder'];
@@ -26,13 +29,37 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
       } else {
         $style = 1;
       }
+      if( $atts['title_select'] ) {
+        $title_select = $atts['title_select'];
+      } else {
+        $title_select = __('Search Scope', CCCSEARCHAJAX_TEXT_DOMAIN);
+      }
+
+      /***** For Search Highlight : START *****/
+      if( $atts['highlight'] == 'true' ) {
+        $highlight = 'data-ccc_posts_search-highlight="true"';
+      } else {
+        $highlight = null;
+      }
+      /***** For Search Highlight : END *****/
+
+      /***** For WordPress Plugin "bogo" : START *****/
+      if( $atts['locale'] === 'bogo' and is_plugin_active( 'bogo/bogo.php' ) ) {
+        $locale = 'data-ccc_posts_search-bogo="'.get_locale().'"';
+      } else {
+        $locale = null;
+      };
+      /***** For WordPress Plugin "bogo" : END *****/
+
       /* セレクトボックスで選択した値の保持 */
       if( isset( $_GET['search_post_type'] ) ) { $select = sanitize_text_field( $_GET['search_post_type'] ); }
 ?>
-<form role="search" method="get" class="search-form" id="ccc-search_ajax-form" action="<?php echo esc_url( home_url('/') ); ?>" data-ccc_posts_search-searchform-style="<?php echo $style; ?>">
+
+
+<form role="search" method="get" class="search-form" id="ccc-search_ajax-form" action="<?php echo esc_url( home_url('/') ); ?>" data-ccc_posts_search-searchform-style="<?php echo $style; ?>" <?php echo $highlight; ?> <?php echo $locale; ?>>
   <input type="search" name="s" id="ccc-search_ajax-search-keyword" placeholder="<?php echo $placeholder; ?>" value="<?php if(is_search()){ echo get_search_query(); } ?>" class="ccc-search_ajax-trigger">
   <div class="search-refine">
-    <p class="title-refine"><?php _e('Select a search area', CCCSEARCHAJAX_TEXT_DOMAIN); ?></p>
+    <p class="title-refine"><?php echo $title_select; ?></p>
     <select name="search_post_type" id="ccc-search_ajax-select-post_type" class="ccc-search_ajax-trigger">
       <option value="all" <?php if($select === 'all') { echo 'selected'; } ?> ><?php _e('All', CCCSEARCHAJAX_TEXT_DOMAIN); ?></option>
       <?php
@@ -97,9 +124,7 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
           $parent_terms = get_terms( $taxonomy->name, $args );
           if( $parent_terms ) {
             echo '<div class="search_ajax_taxonomy" data-search_ajax_taxonomy="'. $taxonomy->name .'">';
-            echo '<div class="select-taxonomy-title ccc-search_ajax-accordion-trigger"><p class="taxonomy-title-text">';
-            printf( __( 'Filter by %s', CCCSEARCHAJAX_TEXT_DOMAIN ), $taxonomy->label );
-            echo '</p><div class="accordion-icon"><span class="accordion-icon-bar"></span><span class="accordion-icon-bar"></span></div>'; //<!-- /.accordion-icon -->
+            echo '<div class="select-taxonomy-title ccc-search_ajax-accordion-trigger"><p class="taxonomy-title-text">'.$taxonomy->label.'</p><div class="accordion-icon"><span class="accordion-icon-bar"></span><span class="accordion-icon-bar"></span></div>'; //<!-- /.accordion-icon -->
             echo '</div>'; //<!-- /.select-taxonomy-title -->
             echo '<div class="ccc-search_ajax-accordion-contents">';
             echo '<ul class="select-terms select-terms-parent">';
