@@ -1,0 +1,95 @@
+# Copyright (C) 2020 Caronima Inc.
+# This file is distributed under the same license as the DBP Cloud WP Plugin package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts Search Plugin Pot v1.0.0\n"
+"Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
+"POT-Creation-Date: 2021-01-20 23:26+0900\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: https://profiles.wordpress.org/takashimatsuyama/\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Textdomain-Support: yesX-Generator: Poedit 1.6.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html_x:1,2c;esc_html__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;"
+"_nx_noop:4c,1,2;_x:1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;"
+"__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 2.4.2\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: assets/results.php:36
+msgid "read more"
+msgstr "続きを読む"
+
+#: assets/results.php:44
+msgid "There are no articles that hit the search criteria."
+msgstr "検索条件にヒットした記事はありません。"
+
+#: assets/shortcode-results.php:38
+msgid "No search keyword has been entered."
+msgstr "検索キーワードが未入力です。"
+
+#: assets/shortcode-results.php:45
+msgid "Read further"
+msgstr "さらに読み込む"
+
+#: assets/shortcode-results.php:46
+msgid "Loading"
+msgstr ""
+
+#: assets/shortcode-results.php:80
+msgid "Search keyword"
+msgstr "検索キーワード"
+
+#: assets/shortcode-results.php:81
+msgid "Search area"
+msgstr "検索範囲"
+
+#: assets/shortcode-results.php:93
+msgid "item display"
+msgid_plural "items display"
+msgstr[0] "件表示"
+
+#: assets/shortcode-searchform.php:21
+msgid "Enter a keyword"
+msgstr "キーワードを入力"
+
+#: assets/shortcode-searchform.php:29
+msgid "Select a search area"
+msgstr "検索範囲を選択"
+
+#: assets/shortcode-searchform.php:31 assets/wp_query.php:35
+msgid "All"
+msgstr "すべて"
+
+#: assets/shortcode-searchform.php:51
+msgid "Search"
+msgstr "検索"
+
+#: assets/shortcode-searchform.php:95
+#, php-format
+msgid "Filter by %s"
+msgstr "%sで絞り込む"
+
+#: function.php:57
+#, php-format
+msgid "<span class=\"number\">%s</span><span class=\"unit\">item</span>"
+msgid_plural ""
+"<span class=\"number\">%s</span><span class=\"unit\">items</span>"
+msgstr[0] ""
+"<span class=\"number\">%s</span><span class=\"unit\">件</span>"
+
+#: posts-search.php:36
+#, php-format
+msgid "Oops, this plugin will soon require PHP %s or higher."
+msgstr "このプラグインは、PHP %s 以上が必要になります。"
+
+#: posts-search.php:62
+msgid "Oops, PHP Class Name Conflict."
+msgstr "PHPのクラス名が競合しています。"

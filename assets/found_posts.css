@@ -1,0 +1,108 @@
+@charset "utf-8";
+@import url('./fonts.css');
+
+/**** common : START ****/
+#ccc-search_ajax-form #ccc-search_ajax-submit {
+  display: none; /* Controlled by JS */
+  cursor: pointer;
+}
+#ccc-search_ajax-form #ccc-search_ajax-submit.found {
+  display: block; /* Controlled by JS */
+}
+/**** common : END ****/
+
+
+
+/**** Style :[data-ccc_posts_search-searchform-style="1"] : START ****/
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] {
+  margin: 1em auto;
+  box-sizing: border-box;
+  text-align: center;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .search_ajax_taxonomy {
+  margin: 2em auto 0.5em auto;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .select-terms {
+  display: inline-block;
+  vertical-align: top;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .select-terms li {
+  display: inline-block;
+  vertical-align: top;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] #ccc-search_ajax-search-keyword {
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0.5em 1em;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 30px;
+  text-align: center;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .taxonomy-title-text {
+  font-weight: bold;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .label-term {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0.5em;
+  cursor: pointer;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .label-term > .text {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1.3;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .label-term > input {
+  display: inline-block;
+  vertical-align: middle;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .title-refine {
+  margin: 2em auto 0.5em auto;
+  font-weight: bold;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] #ccc-search_ajax-select-post_type {
+  font-size: 16px;
+  margin: 0.5em auto;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] #ccc-search_ajax-submit {
+  margin: 2em auto 1em auto;
+  font-size: 14px;
+  padding: 0.35em 0.75em;
+  box-sizing: border-box;
+  border-radius: 5px;
+  line-height: 1;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] #ccc-search_ajax-submit .text {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 0.5em;
+  margin-top: 1px;
+  font-weight: 600;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .icon-ccc_search_ajax-search {
+  width: auto;
+  vertical-align: middle;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .icon-ccc_search_ajax-search::before {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 18px;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .count-found_posts .number {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] #ccc-search_ajax-found_posts {
+  margin: 1em auto;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] #ccc-search_ajax-submit:not(.found) + #ccc-search_ajax-found_posts {
+  margin-top: 2em;
+  color: red;
+}
+#ccc-search_ajax-form[data-ccc_posts_search-searchform-style="1"] .ccc-search_ajax-accordion-contents {
+  margin-top: 1em;
+}
+/**** Style :[data-ccc_posts_search-searchform-style="1"] : END ****/

@@ -1,0 +1,161 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+  exit; // Exit if accessed directly.
+} //endif
+
+if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
+
+  add_shortcode('ccc_posts_search_searchform', array('CCC_Search_Ajax_ShortCode_SearchForm', 'html') );
+
+  class CCC_Search_Ajax_ShortCode_SearchForm {
+
+    public static function html($atts) {
+      ob_start(); // returnでHTMLを返す：出力のバッファリングを有効にする
+
+      $atts = shortcode_atts(array(
+        "placeholder" => '',
+        "style" => '',
+      ),$atts);
+      if( $atts['placeholder'] ) {
+        $placeholder = $atts['placeholder'];
+      } else {
+        $placeholder = __('Enter a keyword', CCCSEARCHAJAX_TEXT_DOMAIN);
+      }
+      if( $atts['style'] or $atts['style'] === 0 or $atts['style'] === '0' ) {
+        $style = $atts['style'];
+      } else {
+        $style = 1;
+      }
+      /* セレクトボックスで選択した値の保持 */
+      if( isset( $_GET['search_post_type'] ) ) { $select = sanitize_text_field( $_GET['search_post_type'] ); }
+?>
+<form role="search" method="get" class="search-form" id="ccc-search_ajax-form" action="<?php echo esc_url( home_url('/') ); ?>" data-ccc_posts_search-searchform-style="<?php echo $style; ?>">
+  <input type="search" name="s" id="ccc-search_ajax-search-keyword" placeholder="<?php echo $placeholder; ?>" value="<?php if(is_search()){ echo get_search_query(); } ?>" class="ccc-search_ajax-trigger">
+  <div class="search-refine">
+    <p class="title-refine"><?php _e('Select a search area', CCCSEARCHAJAX_TEXT_DOMAIN); ?></p>
+    <select name="search_post_type" id="ccc-search_ajax-select-post_type" class="ccc-search_ajax-trigger">
+      <option value="all" <?php if($select === 'all') { echo 'selected'; } ?> ><?php _e('All', CCCSEARCHAJAX_TEXT_DOMAIN); ?></option>
+      <?php
+      $args = array(
+        'public' => true
+      );
+      $post_types = get_post_types( $args, 'names' );
+      unset( $post_types['attachment'] ); // 特定のカスタム投稿タイプを除外（PHP：連想配列から要素を除外）
+      //print_r($post_types);
+      foreach( $post_types as $post_type ) {
+        if( $select === $post_type ) { $selected = 'selected'; } else { $selected = null; }
+        $post_type_obj = get_post_type_object( $post_type );
+        $posttype_name = $post_type_obj->labels->name;
+        echo '<option value="'.$post_type.'" '.$selected.'>'.$posttype_name.'</option>';
+      } //endforeach
+      ?>
+    </select><!-- /#select-post_type -->
+  </div><!-- /.search-refine -->
+  <div class="search-refine">
+    <?php self::all_taxonomies_terms_all( $post_types ); ?>
+  </div><!-- /.search-refine -->
+  <button type="submit" class="button" id="ccc-search_ajax-submit"><i class="icon-ccc_search_ajax-search"></i><span class="text"><?php _e('Search', CCCSEARCHAJAX_TEXT_DOMAIN); ?></span></button><!-- /#ccc-search_ajax-submit -->
+  <div id="ccc-search_ajax-found_posts"></div><!-- /#ccc-search_ajax-found_posts -->
+</form>
+<?php
+      return ob_get_clean();  // returnでHTMLを返す：関数からHTMLを返し、それをいろいろ編集したり、処理を加えてから出力する場面で有効：バッファリングの内容を出力した後にバッファリングを削除
+    } //endfunction
+
+    /*** 指定したタクソノミーの検索用インプットを生成（START） ***/
+    public static function search_ajax_taxonomy_input( $search_taxonomy ) {
+      $terms = get_terms($search_taxonomy);
+      echo '<div class="search_ajax_taxonomy search_ajax_taxonomy-'. $search_taxonomy .'" data-search_ajax_taxonomy="'. $search_taxonomy .'">';
+      foreach($terms as $term) {
+        /* チェックボックスで選択した値の保持 */
+        if( isset( $_GET['search_'. $search_taxonomy] ) ) {
+          $checkboxes = array_map( 'absint', $_GET['search_'. $search_taxonomy] );
+          foreach ($checkboxes as $val) {
+            if($val == $term->term_id) {
+              $checked[$val] = 'checked="checked"';
+            }
+          }
+        }
+        echo '<label class="label-term">';
+        echo '<input type="checkbox" name="search_'. $search_taxonomy .'[]" value="'. $term->term_id .'" '. $checked[$term->term_id] .' class="ccc-search_ajax-trigger">';
+        echo '<span class="text">'. $term->name .'</span>';
+        echo '</label><!-- /.label-term -->';
+      }
+      echo '</div><!-- /.search_taxonomy -->';
+    } //endfunction
+    /*** 指定したタクソノミーの検索用インプットを生成（END） ***/
+
+
+    /*** すべてのカスタム分類のタームを取得する関数（START） ***/
+    public static function all_taxonomies_terms_all( $post_type ) {
+      $taxonomies = get_object_taxonomies( $post_type, 'objects' );
+      unset( $taxonomies['post_format'] ); // 特定のタクソノミーを除外（PHP：連想配列から要素を除外）
+      if( $taxonomies and is_array( $taxonomies ) ) {
+        foreach( $taxonomies as $taxonomy ) {
+          $args = array(
+            'parent' => 0,
+          );
+          $parent_terms = get_terms( $taxonomy->name, $args );
+          if( $parent_terms ) {
+            echo '<div class="search_ajax_taxonomy" data-search_ajax_taxonomy="'. $taxonomy->name .'">';
+            echo '<div class="select-taxonomy-title ccc-search_ajax-accordion-trigger"><p class="taxonomy-title-text">';
+            printf( __( 'Filter by %s', CCCSEARCHAJAX_TEXT_DOMAIN ), $taxonomy->label );
+            echo '</p><div class="accordion-icon"><span class="accordion-icon-bar"></span><span class="accordion-icon-bar"></span></div>'; //<!-- /.accordion-icon -->
+            echo '</div>'; //<!-- /.select-taxonomy-title -->
+            echo '<div class="ccc-search_ajax-accordion-contents">';
+            echo '<ul class="select-terms select-terms-parent">';
+
+            foreach( $parent_terms as $parent_term ) {
+              /* チェックボックスで選択した値の保持 */
+              if( isset( $_GET['search_'. $taxonomy->name] ) ) {
+                $checkboxes = array_map( 'absint', $_GET['search_'. $taxonomy->name] );
+                foreach($checkboxes as $val) {
+                  if($val == $parent_term->term_id) {
+                    $checked[$val] = 'checked="checked"';
+                  } //endif
+                } //endforeach
+              } //endif
+              echo '<li class="item-term-parent">';
+              echo '<label class="label-term">';
+              echo '<input type="checkbox" name="search_'. $taxonomy->name .'[]" value="'. $parent_term->term_id .'" '. $checked[$parent_term->term_id] .' class="ccc-search_ajax-trigger">';
+              echo '<span class="text">'. $parent_term->name .'</span>';
+              echo '</label><!-- /.label-term -->';
+
+              $args = array(
+                'parent' => $parent_term->term_id,
+              );
+              $child_terms = get_terms( $taxonomy->name, $args );
+              if ( $child_terms ) {
+                echo '<ul class="select-terms select-terms-children">';
+                foreach ( $child_terms as $child_term ) {
+                  /* チェックボックスで選択した値の保持 */
+                  if( isset( $_GET['search_'. $taxonomy->name] ) ) {
+                    $checkboxes = array_map( 'absint', $_GET['search_'. $taxonomy->name] );
+                    foreach ($checkboxes as $val) {
+                      if($val == $child_term->term_id) {
+                        $checked[$val] = 'checked="checked"';
+                      } //endif
+                    } //endforeach
+                  } //endif
+                  echo '<li class="item-term-children">';
+                  echo '<label class="label-term">';
+                  echo '<input type="checkbox" name="search_'. $taxonomy->name .'[]" value="'. $child_term->term_id .'" '. $checked[$child_term->term_id] .' class="ccc-search_ajax-trigger">';
+                  echo '<span class="text">'. $child_term->name .'</span>';
+                  echo '</label>'; //<!-- /.label-term -->
+                  echo '</li>'; //<!-- /.item-term-children -->
+                } //endforeach
+                echo '</ul>'; //<!-- /.select-terms-children -->
+              } //endif
+              echo '</li>'; //<!-- /.item-term-parent -->
+            } //endforeach
+            echo '</ul>'; //<!-- /.select-terms-parent -->
+            echo '</div>'; //<!-- /.ccc-search_ajax-accordion-contents -->
+            echo '</div>'; //<!-- /.search_ajax_taxonomy -->
+          } //endif
+        } //endforeach
+      } //endif
+    } //endfunction
+    /*** すべてのカスタム分類のタームを取得する関数（END） ***/
+
+
+  } //endclass
+} //endif
