@@ -3,9 +3,9 @@ Contributors: takashimatsuyama
 Donate link:
 Tags: posts search, search, taxonomy, term
 Requires at least: 4.8
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.4.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,9 @@ Detailed usage is under preparation.
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.1 =
+[Bug fix] About is_plugin_active not working when locale="bogo".
 
 = 1.1.0 =
 Add shortcode attribute (`title_select="" highlight="" locale=""`) markup of thumbnails and modify CSS.

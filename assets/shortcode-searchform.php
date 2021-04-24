@@ -44,7 +44,8 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
       /***** For Search Highlight : END *****/
 
       /***** For WordPress Plugin "bogo" : START *****/
-      if( $atts['locale'] === 'bogo' and is_plugin_active( 'bogo/bogo.php' ) ) {
+      /* Detect plugin. For use on Front End and Back End. */
+      if( $atts['locale'] === 'bogo' and in_array( 'bogo/bogo.php', (array) get_option( 'active_plugins', array() ) ) ) {
         $locale = 'data-ccc_posts_search-bogo="'.get_locale().'"';
       } else {
         $locale = null;
