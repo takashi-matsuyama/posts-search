@@ -53,7 +53,7 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
       /***** For WordPress Plugin "bogo" : END *****/
 
       /* セレクトボックスで選択した値の保持 */
-      if( isset( $_GET['search_post_type'] ) ) { $select = sanitize_text_field( $_GET['search_post_type'] ); }
+      if( isset( $_GET['search_post_type'] ) ) { $select = sanitize_text_field( $_GET['search_post_type'] ); } else { $select = null; }
 ?>
 
 
@@ -62,7 +62,7 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
   <div class="search-refine">
     <p class="title-refine"><?php echo $title_select; ?></p>
     <select name="search_post_type" id="ccc-search_ajax-select-post_type" class="ccc-search_ajax-trigger">
-      <option value="all" <?php if($select === 'all') { echo 'selected'; } ?> ><?php _e('All', CCCSEARCHAJAX_TEXT_DOMAIN); ?></option>
+      <option value="all" <?php if($select === 'all' or $select == null ) { echo 'selected'; } ?> ><?php _e('All', CCCSEARCHAJAX_TEXT_DOMAIN); ?></option>
       <?php
       $args = array(
         'public' => true

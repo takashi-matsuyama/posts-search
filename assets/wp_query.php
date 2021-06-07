@@ -10,15 +10,19 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
 
       $data = []; //レスポンスデータ
 
-      if( $_GET['s'] ) {
+      if( isset($_GET['s']) ) {
         $query_keyword = sanitize_text_field( $_GET['s'] );
-      } else {
+      } else if( isset($_POST['s']) ) {
         $query_keyword = sanitize_text_field( $_POST['s'] );
-      }
-      if( $_GET['search_post_type'] ) {
-        $query_posttype = sanitize_text_field( $_GET['search_post_type'] );
       } else {
+        $query_keyword = null;
+      }
+      if( isset($_GET['search_post_type']) ) {
+        $query_posttype = sanitize_text_field( $_GET['search_post_type'] );
+      } else if( isset($_POST['search_post_type']) ) {
         $query_posttype = sanitize_text_field( $_POST['search_post_type'] );
+      } else {
+        $query_posttype = null;
       }
 
       /*** post_type用 ***/
@@ -53,14 +57,14 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
       $post_types_any = get_post_types( $args, 'names' );
       $taxonomies = get_object_taxonomies( $post_types_any, 'objects' ); //選択項目と検索結果の矛盾を避けるため配列にはすべてのタクソノミーを入れて検索する必要がある。
       foreach( $taxonomies as $taxonomy ) {
-        if( is_array( $_GET['search_'. $taxonomy->name] ) ) {
+        if( isset( $_GET['search_'. $taxonomy->name] ) and is_array( $_GET['search_'. $taxonomy->name] ) ) {
           ${'taxvalue_'. $taxonomy->name} = array_map( 'absint', $_GET['search_'. $taxonomy->name] ) ;
-        } else if( is_array( $_POST['search_'. $taxonomy->name] ) ) {
+        } else if( isset( $_POST['search_'. $taxonomy->name] ) and is_array( $_POST['search_'. $taxonomy->name] ) ) {
           ${'taxvalue_'. $taxonomy->name} = array_map( 'absint', $_POST['search_'. $taxonomy->name] );
         } else {
           ${'taxvalue_'. $taxonomy->name} = array();
         }
-        if( ${'taxvalue_'. $taxonomy->name} ){
+        if( is_array( ${'taxvalue_'. $taxonomy->name} ) ){
           ${'taxquery_'. $taxonomy->name} = array(
             'taxonomy' => $taxonomy->name,
             'terms' => ${'taxvalue_'. $taxonomy->name},
@@ -79,14 +83,18 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
 
 
       /*** 表示数の定義（指定が無ければ管理画面の表示設定（表示する最大投稿数）の値を取得） ***/
-      if( $_POST['ccc-posts_per_page'] ) {
+      if( isset( $_POST['ccc-posts_per_page'] ) ) {
         $posts_per_page = absint( $_POST['ccc-posts_per_page'] ); //負ではない整数に変換
       } else {
         $posts_per_page = get_option('posts_per_page');
       }
 
       /*** すでに表示されている記事リストの個数 ***/
-      $looplength = absint( $_POST['looplength'] );
+      if( isset($_POST['looplength']) ) {
+        $looplength = absint( $_POST['looplength'] );
+      } else {
+        $looplength = null;
+      }
 
       $args= array(
         'post_type' => $post_types,
@@ -101,7 +109,7 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
 
 
       /***** For WordPress Plugin "bogo" : START *****/
-      if( $_POST['bogo'] ) {
+      if( isset($_POST['bogo']) ) {
         $locale = sanitize_text_field( $_POST['bogo'] );
         $args['lang'] = $locale;
       }

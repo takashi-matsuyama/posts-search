@@ -12,7 +12,7 @@ if( ! class_exists( 'CCC_Search_Highlight' ) ) {
   class CCC_Search_Highlight {
     //投稿本文の値（get_the_content）には追加（add_filter）できません。
     public static function results($text){
-      if( $_POST['search_highlight_ajax'] and ( isset($_POST['s']) or get_search_query() ) ) {
+      if( isset($_POST['search_highlight_ajax']) and ( isset($_POST['s']) or get_search_query() ) ) {
         if( isset($_POST['s']) ) {
           $search_query = $_POST['s'];
         } else {

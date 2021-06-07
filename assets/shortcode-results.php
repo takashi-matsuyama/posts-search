@@ -56,7 +56,7 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_Results' ) ) {
 
     /*** 検索リクエストしたタクソノミーの項目内容を表示する関数（START）  ***/
     public static function search_query_taxonomy_text( $query_name, $query_label ) {
-      if( $_GET['search_'. $query_name] ) {
+      if( isset($_GET['search_'. $query_name]) ) {
         echo '<span class="text-query '. $query_name .'">';
         echo '<span class="text-query-label">'. $query_label .'</span>';
         echo '<span class="text-query-value">';
@@ -88,7 +88,7 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_Results' ) ) {
     <?php
       /* 検索リクエストしたタクソノミーの項目内容を表示する関数を呼び出し */
       $taxonomies = get_object_taxonomies( $the_query->query['post_type'], 'objects' ); //第一引数は「配列/文字列/オブジェクト」
-      if( $taxonomies and is_array($taxonomies) ) {
+      if( isset($taxonomies) and is_array($taxonomies) ) {
         foreach( $taxonomies as $taxonomy ) {
           self::search_query_taxonomy_text( $taxonomy->name, $taxonomy->label );
         } //endforeach
