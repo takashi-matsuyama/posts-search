@@ -136,13 +136,14 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
                 $checkboxes = array_map( 'absint', $_GET['search_'. $taxonomy->name] );
                 foreach($checkboxes as $val) {
                   if($val == $parent_term->term_id) {
-                    $checked[$val] = 'checked="checked"';
+                    $checked[$parent_term->term_id] = 'checked="checked"';
                   } //endif
                 } //endforeach
               } //endif
+              $checked_val = isset($checked[$parent_term->term_id]) ? $checked[$parent_term->term_id] : null;
               echo '<li class="item-term-parent">';
               echo '<label class="label-term">';
-              echo '<input type="checkbox" name="search_'. $taxonomy->name .'[]" value="'. $parent_term->term_id .'" '. $checked[$parent_term->term_id] .' class="ccc-search_ajax-trigger">';
+              echo '<input type="checkbox" name="search_'. $taxonomy->name .'[]" value="'. $parent_term->term_id .'" '. $checked_val .' class="ccc-search_ajax-trigger">';
               echo '<span class="text">'. $parent_term->name .'</span>';
               echo '</label><!-- /.label-term -->';
 
@@ -158,13 +159,14 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
                     $checkboxes = array_map( 'absint', $_GET['search_'. $taxonomy->name] );
                     foreach ($checkboxes as $val) {
                       if($val == $child_term->term_id) {
-                        $checked[$val] = 'checked="checked"';
+                        $checked[$child_term->term_id] = 'checked="checked"';
                       } //endif
                     } //endforeach
                   } //endif
+                  $checked_val = isset($checked[$child_term->term_id]) ? $checked[$child_term->term_id] : null;
                   echo '<li class="item-term-children">';
                   echo '<label class="label-term">';
-                  echo '<input type="checkbox" name="search_'. $taxonomy->name .'[]" value="'. $child_term->term_id .'" '. $checked[$child_term->term_id] .' class="ccc-search_ajax-trigger">';
+                  echo '<input type="checkbox" name="search_'. $taxonomy->name .'[]" value="'. $child_term->term_id .'" '. $checked_val .' class="ccc-search_ajax-trigger">';
                   echo '<span class="text">'. $child_term->name .'</span>';
                   echo '</label>'; //<!-- /.label-term -->
                   echo '</li>'; //<!-- /.item-term-children -->
