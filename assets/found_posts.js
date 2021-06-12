@@ -2,7 +2,7 @@
 * Author: Takashi Matsuyama
 * Author URI: https://profiles.wordpress.org/takashimatsuyama/
 * Description: AjaxでWordPressの検索結果の投稿数を表示
-* Version: 1.1.0 or later
+* Version: 1.2.0 or later
 */
 
 /* グローバルネームスペース */
@@ -39,6 +39,18 @@ var CCC = CCC || {};
           data_set['search_'+ data_taxonomy] = eval( 'array_val_'+ data_taxonomy );
         }
       });
+
+      /***** For WP_Query tax_query (relation and operator) : START *****/
+      /* tax_query の relation と operator を設定するオプションを送信データに追加 */
+      var tax_query_relation = $('#ccc-search_ajax-form').data('ccc_posts_search-tax_query_relation');
+      if( tax_query_relation ) {
+        data_set['tax_query_relation'] = tax_query_relation; // 'AND' 'OR', default: 'AND'
+      }
+      var tax_query_operator = $('#ccc-search_ajax-form').data('ccc_posts_search-tax_query_operator');
+      if( tax_query_operator ) {
+        data_set['tax_query_operator'] = tax_query_operator; // 'AND' 'IN' 'NOT IN', default: 'AND'
+      }
+      /***** For WP_Query tax_query (relation and operator) : END *****/
 
       /***** For Search Highlight : START *****/
       /* 検索キーワードをハイライトにするオプションの有無を送信データに追加 */
@@ -77,6 +89,7 @@ var CCC = CCC || {};
         } else {
           submit.removeClass('found');
         }
+        //console.log(data_set);
       });
     } // メンバのメソッドを定義
 
@@ -84,9 +97,49 @@ var CCC = CCC || {};
 
 
   //console.log( CCC.search_ajax.initial() );
-  $('.ccc-search_ajax-trigger').on( 'change', function() {
+  $('.ccc-search_ajax-trigger:not([type="radio"])').on( 'change', function() {
+    //console.log('you changed the input.');
     CCC.search_ajax.found_posts( CCC.search_ajax.initial() );
     //console.log( CCC.search_ajax.initial() );
   });
+
+
+  /*** For [type="radio"] : ラジオボタン：複数グループのラジオボタンを2回クリックで選択解除 ***/
+  var radio_inputs = $('.ccc-search_ajax-trigger[type="radio"]');
+  if( radio_inputs.length > 0 ) {
+    //console.log('There is radio type input.');
+    var checked_array = [];
+    /* アクセス時に既にチェックがあれば事前に巡回してIDを保存 */
+    var radio_inputs_checked = radio_inputs.filter(':checked');
+    if( radio_inputs_checked.length > 0 ) {
+      radio_inputs_checked.each( function() {
+        var radio_checked_name = $(this).attr('name');
+        checked_array[radio_checked_name] = $(this).attr('id');
+      });
+    } //endif
+    radio_inputs.on('click', function () {
+      var radio_id = $(this).attr('id');
+      //console.log(radio_id);
+      var radio_name = $(this).attr('name');
+      //console.log(radio_name);
+      /* クリックしたinputのIDと保存されてるIDが同じだったら */
+      if( radio_id == checked_array[radio_name] ) {
+        /* チェックを外す */
+        $('input[name="'+ radio_name +'"]').prop('checked', false);
+        /* リセット：保存されているIDを削除 */
+        checked_array[radio_name] = false;
+      } else {
+        /* チェックしたinputのIDを保存 */
+        checked_array[radio_name] = radio_id;
+        //console.log(checked_array[radio_name]);
+      }
+      //console.log('you clicked the radio.');
+      CCC.search_ajax.found_posts( CCC.search_ajax.initial() );
+      //console.log( CCC.search_ajax.initial() );
+    });
+  } else {
+    //console.log('There is no radio type input.');
+  } //endif
+
 
 })(jQuery);

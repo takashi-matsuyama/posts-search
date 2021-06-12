@@ -45,7 +45,27 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
 
 
       /*** tax_query用 ***/
-      $taxqueries = array('relation' => 'AND');
+      if( isset($_GET['tax_query_relation']) ) {
+        $tax_query_relation = sanitize_text_field( $_GET['tax_query_relation'] );
+      } else if(isset($_POST['tax_query_relation'])) {
+        $tax_query_relation = sanitize_text_field( $_POST['tax_query_relation'] );
+      } else {
+        $tax_query_relation = 'AND';
+      } //endif
+      if( isset($_GET['tax_query_operator']) ) {
+        $tax_query_operator = sanitize_text_field( $_GET['tax_query_operator'] );
+      } else if(isset($_POST['tax_query_operator'])) {
+        $tax_query_operator = sanitize_text_field( $_POST['tax_query_operator'] );
+      } else {
+        $tax_query_operator = 'AND';
+      } //endif
+      if( $tax_query_operator == 'AND' ) {
+        $include_children = false;
+      } else {
+        $include_children = true;
+      }
+
+      $taxqueries = array( 'relation' => $tax_query_relation );
       /*
       * NG：$taxonomies = get_object_taxonomies( $post_types, 'objects' );
       * 注意：get_object_taxonomies( $post_types_any, 'objects' );の「$post_type_any」の部分は「$post_types」では選択項目と検索結果に矛盾が発生する場合がある。
@@ -62,18 +82,18 @@ if( ! class_exists( 'CCC_Search_Ajax_WP_Query' ) ) {
         } else if( isset( $_POST['search_'. $taxonomy->name] ) and is_array( $_POST['search_'. $taxonomy->name] ) ) {
           ${'taxvalue_'. $taxonomy->name} = array_map( 'absint', $_POST['search_'. $taxonomy->name] );
         } else {
-          ${'taxvalue_'. $taxonomy->name} = array();
-        }
-        if( is_array( ${'taxvalue_'. $taxonomy->name} ) ){
+          ${'taxvalue_'. $taxonomy->name} = null;
+        } //endif
+        if( is_array( ${'taxvalue_'. $taxonomy->name} ) ) {
           ${'taxquery_'. $taxonomy->name} = array(
             'taxonomy' => $taxonomy->name,
             'terms' => ${'taxvalue_'. $taxonomy->name},
             'field' => 'term_id',
-            'include_children' => false,
-            'operator' => 'AND', // IN（いずれかに合致）/ AND（全てに合致）/ NOT IN（いずれにも合致しない）
+            'include_children' => $include_children,
+            'operator' => $tax_query_operator, // IN（いずれかに合致）/ AND（全てに合致）/ NOT IN（いずれにも合致しない）
           );
-        }
-        array_push( $taxqueries, ${'taxquery_'. $taxonomy->name} );
+          array_push( $taxqueries, ${'taxquery_'. $taxonomy->name} );
+        } //endif
       } //endforeach
 
 

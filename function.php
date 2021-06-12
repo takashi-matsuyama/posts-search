@@ -56,6 +56,7 @@ class CCC_Search_Ajax {
       //$data = '<p class="count-found_posts"><span class="number">'.$the_query->found_posts.'</span><span class="unit">'.__('件').'</span></p>';
       $number = sprintf( _n( '<span class="number">%s</span><span class="unit">item</span>', '<span class="number">%s</span><span class="unit">items</span>', $the_query->found_posts, CCCSEARCHAJAX_TEXT_DOMAIN ), $the_query->found_posts );
       $data = '<p class="count-found_posts">'.$number.'</p>';
+      //print_r( $ajax_wp_query['taxqueries'] );
     } else {
       //status_header( '403' );
       $data = 'Forbidden';

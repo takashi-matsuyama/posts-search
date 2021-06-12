@@ -3,7 +3,7 @@
  * Plugin Name: Posts Search
  * Plugin URI: https://wordpress.org/plugins/posts-search/
  * Description: Search posts by taxonomy terms and post type with Ajax.
- * Version: 1.1.3
+ * Version: 1.2.0
  * Requires at least: 4.8
  * Requires PHP: 5.4.0
  * Author: Takashi Matsuyama

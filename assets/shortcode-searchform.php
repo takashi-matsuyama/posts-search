@@ -16,6 +16,9 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
         "placeholder" => '',
         "style" => '',
         "title_select" => '',
+        "input_type" => '',
+        "tax_query_relation" => '',
+        "tax_query_operator" => '',
         "highlight" => '',
         "locale" => '',
       ),$atts);
@@ -33,6 +36,23 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
         $title_select = $atts['title_select'];
       } else {
         $title_select = __('Search Scope', CCCSEARCHAJAX_TEXT_DOMAIN);
+      }
+      if( $atts['input_type'] == 'radio' ) {
+        $input_type = 'radio';
+      } else {
+        $input_type = 'checkbox';
+      }
+      if( $atts['tax_query_relation'] == 'OR' ) {
+        $tax_query_relation = 'OR';
+      } else {
+        $tax_query_relation = 'AND';
+      }
+      if( $atts['tax_query_operator'] == 'IN' ) {
+        $tax_query_operator = 'IN';
+      } else if( $atts['tax_query_operator'] == 'NOT IN' ) {
+        $tax_query_operator = 'NOT IN';
+      } else {
+        $tax_query_operator = 'AND';
       }
 
       /***** For Search Highlight : START *****/
@@ -57,7 +77,7 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
 ?>
 
 
-<form role="search" method="get" class="search-form" id="ccc-search_ajax-form" action="<?php echo esc_url( home_url('/') ); ?>" data-ccc_posts_search-searchform-style="<?php echo $style; ?>" <?php echo $highlight; ?> <?php echo $locale; ?>>
+<form role="search" method="get" class="search-form" id="ccc-search_ajax-form" action="<?php echo esc_url( home_url('/') ); ?>" data-ccc_posts_search-searchform-style="<?php echo $style; ?>" data-ccc_posts_search-tax_query_relation="<?php echo $tax_query_relation; ?>" data-ccc_posts_search-tax_query_operator="<?php echo $tax_query_operator; ?>" <?php echo $highlight; ?> <?php echo $locale; ?> >
   <input type="search" name="s" id="ccc-search_ajax-search-keyword" placeholder="<?php echo $placeholder; ?>" value="<?php if(is_search()){ echo get_search_query(); } ?>" class="ccc-search_ajax-trigger">
   <div class="search-refine">
     <p class="title-refine"><?php echo $title_select; ?></p>
@@ -80,41 +100,19 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
     </select><!-- /#select-post_type -->
   </div><!-- /.search-refine -->
   <div class="search-refine">
-    <?php self::all_taxonomies_terms_all( $post_types ); ?>
+    <?php self::all_taxonomies_terms_all( $post_types, $input_type ); ?>
   </div><!-- /.search-refine -->
   <button type="submit" class="button" id="ccc-search_ajax-submit"><i class="icon-ccc_search_ajax-search"></i><span class="text"><?php _e('Search', CCCSEARCHAJAX_TEXT_DOMAIN); ?></span></button><!-- /#ccc-search_ajax-submit -->
   <div id="ccc-search_ajax-found_posts"></div><!-- /#ccc-search_ajax-found_posts -->
+  <input type="hidden" name="tax_query_relation" value="<?php echo $tax_query_relation; ?>">
+  <input type="hidden" name="tax_query_operator" value="<?php echo $tax_query_operator; ?>">
 </form>
 <?php
       return ob_get_clean();  // returnでHTMLを返す：関数からHTMLを返し、それをいろいろ編集したり、処理を加えてから出力する場面で有効：バッファリングの内容を出力した後にバッファリングを削除
     } //endfunction
 
-    /*** 指定したタクソノミーの検索用インプットを生成（START） ***/
-    public static function search_ajax_taxonomy_input( $search_taxonomy ) {
-      $terms = get_terms($search_taxonomy);
-      echo '<div class="search_ajax_taxonomy search_ajax_taxonomy-'. $search_taxonomy .'" data-search_ajax_taxonomy="'. $search_taxonomy .'">';
-      foreach($terms as $term) {
-        /* チェックボックスで選択した値の保持 */
-        if( isset( $_GET['search_'. $search_taxonomy] ) ) {
-          $checkboxes = array_map( 'absint', $_GET['search_'. $search_taxonomy] );
-          foreach ($checkboxes as $val) {
-            if($val == $term->term_id) {
-              $checked[$val] = 'checked="checked"';
-            }
-          }
-        }
-        echo '<label class="label-term">';
-        echo '<input type="checkbox" name="search_'. $search_taxonomy .'[]" value="'. $term->term_id .'" '. $checked[$term->term_id] .' class="ccc-search_ajax-trigger">';
-        echo '<span class="text">'. $term->name .'</span>';
-        echo '</label><!-- /.label-term -->';
-      }
-      echo '</div><!-- /.search_taxonomy -->';
-    } //endfunction
-    /*** 指定したタクソノミーの検索用インプットを生成（END） ***/
-
-
     /*** すべてのカスタム分類のタームを取得する関数（START） ***/
-    public static function all_taxonomies_terms_all( $post_type ) {
+    public static function all_taxonomies_terms_all( $post_type, $input_type=false ) {
       $taxonomies = get_object_taxonomies( $post_type, 'objects' );
       unset( $taxonomies['post_format'] ); // 特定のタクソノミーを除外（PHP：連想配列から要素を除外）
       if( $taxonomies and is_array( $taxonomies ) ) {
@@ -129,7 +127,6 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
             echo '</div>'; //<!-- /.select-taxonomy-title -->
             echo '<div class="ccc-search_ajax-accordion-contents">';
             echo '<ul class="select-terms select-terms-parent">';
-
             foreach( $parent_terms as $parent_term ) {
               /* チェックボックスで選択した値の保持 */
               if( isset( $_GET['search_'. $taxonomy->name] ) ) {
@@ -143,7 +140,7 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
               $checked_val = isset($checked[$parent_term->term_id]) ? $checked[$parent_term->term_id] : null;
               echo '<li class="item-term-parent">';
               echo '<label class="label-term">';
-              echo '<input type="checkbox" name="search_'. $taxonomy->name .'[]" value="'. $parent_term->term_id .'" '. $checked_val .' class="ccc-search_ajax-trigger">';
+              echo '<input type="'.$input_type.'" name="search_'. $taxonomy->name .'[]" value="'. $parent_term->term_id .'" '. $checked_val .' class="ccc-search_ajax-trigger" id="'. $taxonomy->name .'-'. $parent_term->term_id .'">';
               echo '<span class="text">'. $parent_term->name .'</span>';
               echo '</label><!-- /.label-term -->';
 
@@ -166,7 +163,7 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_SearchForm' ) ) {
                   $checked_val = isset($checked[$child_term->term_id]) ? $checked[$child_term->term_id] : null;
                   echo '<li class="item-term-children">';
                   echo '<label class="label-term">';
-                  echo '<input type="checkbox" name="search_'. $taxonomy->name .'[]" value="'. $child_term->term_id .'" '. $checked_val .' class="ccc-search_ajax-trigger">';
+                  echo '<input type="'.$input_type.'" name="search_'. $taxonomy->name .'[]" value="'. $child_term->term_id .'" '. $checked_val .' class="ccc-search_ajax-trigger" id="'. $taxonomy->name .'-'. $child_term->term_id .'">';
                   echo '<span class="text">'. $child_term->name .'</span>';
                   echo '</label>'; //<!-- /.label-term -->
                   echo '</li>'; //<!-- /.item-term-children -->

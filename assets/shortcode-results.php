@@ -64,13 +64,15 @@ if( ! class_exists( 'CCC_Search_Ajax_ShortCode_Results' ) ) {
           $get_search_query_name = array_map( 'absint', $_GET['search_'. $query_name] );
           foreach( $get_search_query_name as $val ) {
             $term_name = get_term_by('id', $val, $query_name);
-            if( $val === end( $get_search_query_name ) ) {
-              echo $term_name->name;
-            } else {
-              echo $term_name->name.', ';
-            }
+            if( $term_name ) {
+              if( $val === end( $get_search_query_name ) ) {
+                echo $term_name->name;
+              } else {
+                echo $term_name->name.', ';
+              } //endif
+            } //endif
           } //endforeach
-        }
+        } //endif
         echo '</span>'; //<!-- /.text-query-value -->
         echo '</span>'; //<!-- /.text-query -->
       } //endif
