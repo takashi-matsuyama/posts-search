@@ -6,7 +6,7 @@ Contributors: takashimatsuyama
 Donate link:  
 Tags: posts search, search, taxonomy, term  
 Requires at least: 4.8  
-Tested up to: 5.7  
+Tested up to: 5.8  
 Requires PHP: 5.4.0  
 Stable tag: 1.2.0  
 License: GPLv2 or later  
