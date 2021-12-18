@@ -8,7 +8,7 @@ Tags: posts search, search, taxonomy, term
 Requires at least: 4.8  
 Tested up to: 5.8  
 Requires PHP: 5.4.0  
-Stable tag: 1.2.0  
+Stable tag: 1.2.1  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -39,6 +39,9 @@ Detailed usage is under preparation.
 3. Use shortcodes to display the posts search.
 
 ## Changelog
+
+### 1.2.1
+Fixed a bug related to "data_set" on line 28 - 46 of found_posts.js.
 
 ### 1.2.0
 Add shortcode attribute (`[ccc_posts_search_searchform tax_query_relation="OR" tax_query_operator="IN" input_type="radio"]` default: "AND, AND, checkbox").
