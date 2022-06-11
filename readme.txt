@@ -3,9 +3,9 @@ Contributors: takashimatsuyama
 Donate link:
 Tags: posts search, search, taxonomy, term
 Requires at least: 4.8
-Tested up to: 5.8
+Tested up to: 6.0
 Requires PHP: 5.4.0
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,5 +40,8 @@ Detailed usage is under preparation.
 This plugin is [developed on GitHub](https://github.com/takashi-matsuyama/posts-search)
 
 == Changelog ==
+
+= 1.2.2 =
+Tested on WordPress 6.0.
 
 See the [release notes on GitHub](https://github.com/takashi-matsuyama/posts-search/releases).
